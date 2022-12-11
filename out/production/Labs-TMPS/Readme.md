@@ -8,351 +8,441 @@
 
 ## Objectives:
 
-* Make 5 different types of creational design patterns.
-* Get familiarized with creational patterns.
+* Make 5 different types of structural design patterns.
+* Get familiarized with structural patterns.
 
 ## Implementation description
-**Abstract Factory**
-* In my FurnitureFactory.java file I have an interface furniture , with 3 kind of objects 
-of abstract class chair ,coffeetable and sofa. All that abstract classes has 2 class , that
-extends the initial one , each of two is Modern and Victorian style for object creation .
+**Adapter**
+
+*Adapter is a structural design pattern that allows objects with incompatible interfaces to collaborate.
+
+You can see, I have 2 specific classes radio stand and TV stand. Both use the round stand class, to be placed on the wall, thus the problem arises, because the round stand was written for the Tv class, and this stand can only hold a device of a certain size, which in the case of the Tv class is given by the ready method written. To check if the radio can be placed on this round stand, we write an adapter and use the dimensions of the radio as the input for the fit verification method from the RoundStand class.
 ```
-interface furniture{
-Chair createChair();
-CoffeeTable createCoffeeTable();
-Sofa createSofa();
-}
+public class TvRadioAdapter extends TvStand{
+    private RadioStand radio;
 
-abstract class Chair{
-protected int numberOfLegs;
-protected int numberOfSits;
-abstract void getnumberOfLegs(int l);
-abstract void getnumberOfSits(int s);
-}
-
-abstract class CoffeeTable{
-protected int numberOfLegs;
-protected double length;
-protected double width;
-abstract void getnumberOfLegs(int l);
-abstract void getLength(double l);
-abstract void getWidth(double w);
-}
-
-abstract class Sofa{
-protected int numberOfSits;
-protected String materialChoosen;
-abstract void getnumberOfSits(int s);
-abstract void getMaterial(String m);
-}
-```
-soo we can see an interface of furniture and some abstract classes for all kind of furniture
-
-in addition I make for all kind of styles , some aditional classes
-for example in modern style :
-```
-class ModernChairs extends Chair{
-    void getnumberOfLegs(int l){
-        numberOfLegs = l;
-    }
-    void getnumberOfSits(int s){
-        numberOfSits = s;
-    }
-}
-
-class ModernCoffeeTable extends CoffeeTable{
-    void getnumberOfLegs(int l){
-        numberOfLegs = l;
+    public TvRadioAdapter(RadioStand radio) {
+        this.radio = radio;
     }
 
     @Override
-    void getLength(double l) {
-        length = l;
-    }
-
-    @Override
-    void getWidth(double w) {
-        width = w;
-    }
-}
-
-class ModernSofa extends Sofa{
-    @Override
-    void getMaterial(String m) {
-        materialChoosen = m;
-    }
-
-    @Override
-    void getnumberOfSits(int s) {
-        numberOfSits = s;
-    }
-}
-
-class ModernStyle implements furniture{
-    @Override
-    public Chair createChair() {
-        ModernChairs tempChair = new ModernChairs();
-        return tempChair;
-    }
-
-    @Override
-    public CoffeeTable createCoffeeTable() {
-        ModernCoffeeTable tempCoffee = new ModernCoffeeTable();
-        return tempCoffee;
-    }
-
-    @Override
-    public Sofa createSofa() {
-        ModernSofa tempSofa = new ModernSofa();
-        return tempSofa;
-    }
-}
-
-```
-Then I create a  piece of furniture , I make a new one in the modern/victorian style .
-Soo I can get from the factory an object in wanted style. 
-
-* I can add what in GenerateFurniture I have a kind of implementation of that abstract factory 
-soo it's just to show some working examples.
-
-**Builder**
-* Soo in Buider file I have a class House ,with some required variables ,and some optional
-, and in order to add this optional parameters I implement another class builder , that have
-methods , each with an creation of object of BuilderHouse class , and of course one build 
-method that allow to make an object of class House , with same param as in BuilderHouse class.
-  (I mean after building)
-
-First of all the class itself:
-```
-class House{
-        // required param
-        private int nr_of_walls;
-        private int nr_of_doors;
-        private int nr_of_windows;
-
-        //optional
-        private boolean isMedieval;
-        private boolean isRococo;
-        private int nr_of_towers;
-        private int nr_of_guns;
-        private int nr_of_staff;
-
-        public int getNr_of_walls(){
-            return nr_of_walls;
-        }
-
-        public int getNr_of_doors() {
-            return nr_of_doors;
-        }
-
-        public int getNr_of_windows() {
-            return nr_of_windows;
-        }
-
-        public boolean isMedieval() {
-            return isMedieval;
-        }
-
-        public boolean isRococo() {
-            return isRococo;
-        }
-
-        public int getNr_of_towers() {
-            return nr_of_towers;
-        }
-
-        public int getNr_of_guns() {
-            return nr_of_guns;
-        }
-
-        public int getNr_of_staff() {
-            return nr_of_staff;
-        }
-```
-
-the copy-constructor for getting an object with builder in fitch :
-```
-private House(HouseBuilder builder){
-            this.isMedieval = builder.isMedieval;
-            this.isRococo = builder.isRococo;
-            this.nr_of_walls = builder.nr_of_walls;
-            this.nr_of_doors = builder.nr_of_doors;
-            this.nr_of_windows = builder.nr_of_windows;
-            this.nr_of_towers = builder.nr_of_towers;
-            this.nr_of_guns = builder.nr_of_guns;
-            this.nr_of_staff = builder.nr_of_staff;
-        }
-```
-
-soo the builder class :
-
-```
-public static class HouseBuilder{
-            // required param
-            private int nr_of_walls;
-            private int nr_of_doors;
-            private int nr_of_windows;
-
-            //optional
-            private boolean isMedieval;
-            private boolean isRococo;
-            private int nr_of_towers;
-            private int nr_of_guns;
-            private int nr_of_staff;
-
-            public HouseBuilder(int nr_walls,int nr_doors,int nr_windows){
-                this.nr_of_walls = nr_walls;
-                this.nr_of_doors = nr_doors;
-                this.nr_of_windows = nr_windows;
-            }
-
-            public HouseBuilder setMedieval(boolean medieval) {
-                this.isMedieval = medieval;
-                return this;
-            }
-
-            public HouseBuilder setRococo(boolean rococo){
-                this.isRococo = rococo;
-                return this;
-            }
-
-            public HouseBuilder hasTowers(int nr_of_towers){
-                this.nr_of_towers = nr_of_towers;
-                return this;
-            }
-
-            public HouseBuilder hasGuns(int nr_guns){
-                this.nr_of_guns = nr_guns;
-                return this;
-            }
-
-            public HouseBuilder hasStaff(int nr_staff){
-                this.nr_of_staff = nr_staff;
-                return this;
-            }
-
-            public House build(){
-                return new House(this);
-            }
-        }
-```
-
-**Factory Method**
-* Is the first one that I implement, in this case I use a shiping factory to have a Shipping class
-in that I have some param and a method , all this has extended in classes Avia , Ship and Truck.
-In the fact it's just an object creator of shipping class.
-
-I have one abstract class named shipping, and some concrete class like avia , ship and truck
-to present the factory objects , soo I can get a concrete object with some working stuff like 
-a method to calculate bill ( each concrete class has different equation to compute bill)
-
-Soo all my factory method is :
-abstract class Shipping{
-protected double price_km;
-abstract void getPrice_Km();
-
-```
-    public void calculateBill(int dist){
-            getPrice_Km();
-            System.out.println(dist*price_km);
-        }
-    }
-    // make a abstract class of shipping
-
-    class Avia extends Shipping{
-        //@override
-        public void getPrice_Km(){
-            price_km = 5.5;
-        }
-    }
-    // first class of shipping with a plane
-
-    class Ship extends Shipping{
-        //@override
-        public void getPrice_Km(){
-            price_km = 7.5;
-        }
-    }
-    // Deliver by sea in a container ##DOCKER##
-
-    class Truck extends Shipping{
-
-        public void getPrice_Km(){
-            price_km = 2.3;
-        }
-    }//Deliver by the Truck , but at a lower price
-```
-
-**Prototype**
-
-* Prototype a design pattern there we can have some clones of the same object
-
-* Like that in my execution I have an abstract method called shapes , and it is extended by 2 concrete 
-classes Rectangle and Circle , in my test app : "GenerateShapes" I have a creation of object
-of class Circle , and after that I clone it into another object of same type . 
-So in that case I get a prototype to make soo many object of the same type as I want.
-In my code I write all the classes in this way:
-
-```
-abstract class Shape{
-    int x ;
-    int y ;
-    String color;
-
-    Shape(){};
-
-    Shape(Shape tempShape){
-        this();
-        this.x = tempShape.x;
-        this.y = tempShape.y;
-        this.color = tempShape.color;
-    }
-
-
-
-    public abstract Shape clone();
-}
-
-class Circle extends Shape{
-    int radius;
-
-    public Circle(Circle ctemp){
-        super(ctemp);
-        this.radius = ctemp.radius;
-    }
-
-    public Circle(int x,int y, String color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-    }
-
-
-    public Shape clone(){
-        return new Circle(this);
+    public double getArea() {
+        double result;
+        result = (radio.getLength() * radio.getHeight());
+        return result;
     }
 }
 ```
 
-**Singleton**
+**Bridge**
+* Bridge is a structural design pattern that lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently of each other.
 
-* The simplest design pattern in creational DP .
+This example illustrates how the Bridge pattern can help divide the monolithic code of an app that manages devices and their remote controls. The Device classes act as the implementation, whereas the Remotes act as the abstraction.
+The base remote control class declares a reference field that links it with a device object. All remotes work with the devices via the general device interface, which lets the same remote support multiple device types.
 
-The ideea behind this is simple , we use it then we need to instantiate only one object of a 
-class , it can be achieved by 2 methods, I choose to initiate the obj at the load time :
+``` 
+public interface Device {
+    boolean isEnabled();
 
+    void enable();
+
+    void disable();
+
+    int getVolume();
+
+    void setVolume(int percent);
+
+    int getChannel();
+
+    void setChannel(int channel);
+
+    void printStatus();
+}
 ```
-    private static Singleton obj=new Singleton();//Early, instance will be created at load time
-    private Singleton(){}
 
-    public static Singleton getSingleton(){
-        return obj;
+also  all magic is in following piece of code :
+
+``` 
+public class AdvancedRemote extends BasicRemote {
+
+    public AdvancedRemote(Device device) {
+        super.device = device;
     }
 
-    public void doSomething(){
-        System.out.println("Only one object will be initiated , by Early initialization");
+    public void mute() {
+        System.out.println("Remote: mute");
+        device.setVolume(0);
+    }
+}
+```
+
+and in Basic Remote :
+
+``` 
+public class BasicRemote implements Remote {
+    protected Device device;
+
+    public BasicRemote() {}
+
+    public BasicRemote(Device device) {
+        this.device = device;
+    }
+
+    @Override
+    public void power() {
+        System.out.println("Remote: power toggle");
+        if (device.isEnabled()) {
+            device.disable();
+        } else {
+            device.enable();
+        }
+    }
+
+    @Override
+    public void volumeDown() {
+        System.out.println("Remote: volume down");
+        device.setVolume(device.getVolume() - 10);
+    }
+
+    @Override
+    public void volumeUp() {
+        System.out.println("Remote: volume up");
+        device.setVolume(device.getVolume() + 10);
+    }
+
+    @Override
+    public void channelDown() {
+        System.out.println("Remote: channel down");
+        device.setChannel(device.getChannel() - 1);
+    }
+
+    @Override
+    public void channelUp() {
+        System.out.println("Remote: channel up");
+        device.setChannel(device.getChannel() + 1);
+    }
+}
+```
+
+**Composite**
+* COmposite is a structural design pattern that lets you compose objects into tree structures and then work with these structures as if they were individual objects.
+
+As we can see, I have a baseDevice class that implements the Device interface and offers certain devices such as TV and Radio, in order to operate with several devices, I also have the CompositeDevices class, thus hierarchically from composite Devices, I can operate up to concrete objects such as TV and Radio.
+
+
+```
+public class BaseDevice implements Device {
+    private boolean on = false;
+    private int volume = 30;
+    private int channel = 1;
+
+    public BaseDevice(boolean on, int volume, int channel) {
+        this.on = on;
+        this.volume = volume;
+        this.channel = channel;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return on;
+    }
+
+    @Override
+    public void enable() {
+        this.on = true;
+    }
+
+    @Override
+    public void disable() {
+        this.on = false;
+    }
+
+    @Override
+    public int getVolume() {
+        return volume;
+    }
+
+    @Override
+    public void setVolume(int percent) {
+        this.volume = percent;
+    }
+
+    @Override
+    public int getChannel() {
+        return channel;
+    }
+
+    @Override
+    public void setChannel(int channel) {
+        this.channel = channel;
+    }
+
+    @Override
+    public void printStatus() {
+        System.out.println("------------------------------------");
+        System.out.println("| I'm a device.");
+        System.out.println("| I'm " + (on ? "enabled" : "disabled"));
+        System.out.println("| Current volume is " + volume + "%");
+        System.out.println("| Current channel is " + channel);
+        System.out.println("------------------------------------\n");
+    }
+}
+
+```
+
+``` 
+public class CompositeDevice extends BaseDevice {
+    protected List<Device> children = new ArrayList<>();
+
+    public CompositeDevice(Device... components) {
+        super(true, 0, 1);
+        add(components);
+    }
+
+    public void add(Device component) {
+        children.add(component);
+    }
+
+    public void add(Device... components) {
+        children.addAll(Arrays.asList(components));
+    }
+
+    public void remove(Device child) {
+        children.remove(child);
+    }
+
+    public void remove(Device... components) {
+        children.removeAll(Arrays.asList(components));
+    }
+
+    public void clear() {
+        children.clear();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        if (children.size() == 0) {
+            return false;
+        }
+        boolean x = children.get(0).isEnabled();
+        for (Device child : children) {
+            if (child.isEnabled() == true) {
+                return true;
+            }
+        }
+        return x;
+    }
+
+    @Override
+    public void enable() {
+        for (Device child : children) {
+            child.enable();
+        }
+    }
+
+    @Override
+    public void disable() {
+        for (Device child : children) {
+            child.disable();
+        }
+    }
+
+    @Override
+    public int getVolume() {
+        if (children.size() == 0) {
+            return 0;
+        }
+        int x = children.get(0).getVolume();
+        for (Device child : children) {
+            if (child.getVolume() < x) {
+                x = child.getVolume();
+            }
+        }
+        return x;
+    }
+
+    @Override
+    public void setVolume(int percent) {
+        for (Device child : children) {
+            child.setVolume(percent);
+        }
+    }
+
+    @Override
+    public int getChannel() {
+        if (children.size() == 0) {
+            return 0;
+        }
+        int x = children.get(0).getChannel();
+        for (Device child : children) {
+            if (child.getChannel() < x) {
+                x = child.getChannel();
+            }
+        }
+        return x;
+    }
+
+    @Override
+    public void setChannel(int channel) {
+        for (Device child : children) {
+            child.setChannel(channel);
+        }
+    }
+
+    @Override
+    public void printStatus(){
+        for (Device child : children) {
+            child.printStatus();
+        }
+    }
+}
+```
+
+**Decorator**
+
+* Decorator is a structural design pattern that lets you attach new behaviors to objects by placing these objects inside special wrapper objects that contain the behaviors.
+
+Thus I have a TV object, which should be of different colors at the customer's request, so we decided to add a decorator, to offer the possibility to choose the red color as well. So I have a new object, which contains the Tv object, but which also has a new method for choosing the color red.
+Decorator to color in red any device like Tv or Radio.:
+
+```
+public class RedDeviceDecorator extends DeviceDecorator{
+
+    public RedDeviceDecorator(Device decoratedDevice) {
+        super(decoratedDevice);
+    }
+
+    @Override
+    public void setRedColor() {
+        setRedBorder(device);
+    }
+
+    private void setRedBorder(Device device){
+        System.out.println("Border Color: Red");
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return device.isEnabled();
+    }
+
+    @Override
+    public void enable() {
+        device.enable();
+    }
+
+    @Override
+    public void disable() {
+        device.disable();
+    }
+
+    @Override
+    public int getVolume() {
+        return device.getVolume();
+    }
+
+    @Override
+    public void setVolume(int percent) {
+        device.setVolume(percent);
+    }
+
+    @Override
+    public int getChannel() {
+        return device.getChannel();
+    }
+
+    @Override
+    public void setChannel(int channel) {
+        device.setChannel(channel);
+    }
+
+    @Override
+    public void printStatus() {
+        device.printStatus();
+        setRedColor();
+    }
+}
+```
+
+**Facade**
+
+* Facade is a structural design pattern that provides a simplified (but limited) interface to a complex system of classes, library or framework.
+
+While Facade decreases the overall complexity of the application, it also helps to move unwanted dependencies to one place.
+In this example, the Facade simplifies communication with a complex video conversion framework.
+
+The Facade provides a single class with a single method that handles all the complexity of configuring the right classes of the framework and retrieving the result in a correct format.
+
+```
+public class VideoConversionFacade {
+    public File convertVideo(String fileName, String format) {
+        System.out.println("VideoConversionFacade: conversion started.");
+        TvVideoFile file = new TvVideoFile(fileName);
+        Codec sourceCodec = CodecFactory.extract(file);
+        Codec destinationCodec;
+        if (format.equals("mp4")) {
+            destinationCodec = new MPEG4CompressionCodec();
+        } else {
+            destinationCodec = new OggCompressionCodec();
+        }
+        TvVideoFile buffer = BitrateReader.read(file, sourceCodec);
+        TvVideoFile intermediateResult = BitrateReader.convert(buffer, destinationCodec);
+        File result = (new AudioMixer()).fix(intermediateResult);
+        System.out.println("VideoConversionFacade: conversion completed.");
+        return result;
+    }
+}
+```
+
+**Flyweight**
+
+* Flyweight is a structural design pattern that allows programs to support vast quantities of objects by keeping their memory consumption low.
+
+The pattern achieves it by sharing parts of object state between multiple objects. In other words, the Flyweight saves RAM by caching the same data used by different objects.
+
+My example is very simple, I just create 20 TVs, with different channels open, so in case I need to offer a TV with the already created channel, I send the given object, I don't create it again, so I get a release of the branch, because clients can watch the same TV, and it is not necessary to "create" new TV-type objects.
+```
+    private static final HashMap tvMap = new HashMap();
+
+    public static Device getTv(int channel) {
+        Tv xiaomi = (Tv)tvMap.get(channel);
+
+        if(xiaomi == null) {
+            xiaomi = new Tv();
+            xiaomi.setChannel(1);
+            tvMap.put(channel, xiaomi);
+            System.out.println("Creating tv with channel : " + channel);
+        }
+        return xiaomi;
     }
 ```
 
-So I achieve that just putting the constructor in private field , and now I have just a class
-with an object of that class , that can do something , and I can't make any other obj-s of that class.
+**Proxy**
+
+*Proxy is a structural design pattern that lets you provide a substitute or placeholder for another object. A proxy controls access to the original object, allowing you to perform something either before or after the request gets through to the original object.
+
+We are going to create an Stream interface and concrete classes implementing the Stream interface. ProxyStream is a a proxy class to reduce memory footprint of LiveStream object loading.
+
+ProxyTest, our demo class, will use ProxyStream to get a Stream object to load and display as it needs.
+
+In other words, we have a live stream from YouTube, which must be uploaded to the TV, but to upload it we use the loader, thus to use the loader only once, we use the Proxy design, so now when the stream is needed , it will be displayed without loading from the Internet.
+```
+    private LiveStream liveStream;
+    private String liveHost;
+
+    public ProxyStream(String liveHost){
+        this.liveHost = liveHost;
+    }
+
+    @Override
+    public void display() {
+        if(liveStream == null){
+            liveStream = new LiveStream(liveHost);
+        }
+        liveStream.display();
+    }
+```
+
+
+##Conclusion and some words to add
+Also, each design pattern in this laboratory has a special test, through which you can observe in reality how everything works.
